@@ -1,20 +1,18 @@
-package controller
+package userHandler
 
 import (
 	"net/http"
 	"regexp"
-	"tiktok/Redis"
-	"tiktok/common"
-	"tiktok/model"
-
-	"tiktok/utils"
+	"tiktok/internal/mysqlDB"
+	"tiktok/internal/rdb"
+	"tiktok/pkg/utils"
 
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 )
 
 func Register(c *gin.Context) {
-	db := common.GetDB()
+	db := mysqlDB.GetDB()
 
 	email := c.PostForm("email")
 	password := c.PostForm("password")
@@ -23,7 +21,7 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	var user model.User
+	var user mysqlDB.User
 	db.Where("email = ?", email).First(&user)
 	if user.ID != 0 {
 		utils.Response(c, http.StatusBadRequest, "邮箱已被注册", "")
@@ -37,7 +35,7 @@ func Register(c *gin.Context) {
 	}
 
 	name := "用户" + utils.RandomString(10)
-	newUser := model.User{
+	newUser := mysqlDB.User{
 		Name:     name,
 		Email:    email,
 		Password: string(hashedPassword),
@@ -46,7 +44,7 @@ func Register(c *gin.Context) {
 	db.Create(&newUser)
 
 	//将用户的注册信息存入redis，使注册后五分钟用户的登录不用访问数据库
-	err = Redis.SetUserInfo(newUser)
+	err = rdb.SetUserInfo(newUser)
 	if err != nil {
 		utils.Response(c, http.StatusInternalServerError, "redis set出错", "")
 		return
@@ -56,7 +54,7 @@ func Register(c *gin.Context) {
 }
 
 func Login(c *gin.Context) {
-	db := common.GetDB()
+	db := mysqlDB.GetDB()
 
 	email := c.PostForm("email")
 	password := c.PostForm("password")
@@ -65,9 +63,9 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	var user model.User
+	var user mysqlDB.User
 	//尝试从reids中取出用户注册信息，如果不存在再访问数据库
-	temUser, err := Redis.GetUserInfo(email)
+	temUser, err := rdb.GetUserInfo(email)
 	if err == nil {
 		user = temUser
 	} else {
@@ -84,7 +82,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	token, err := common.ReleaseToken(user)
+	token, err := utils.ReleaseToken(user)
 	if err != nil {
 		utils.Response(c, http.StatusInternalServerError, "token生成失败", "")
 		return

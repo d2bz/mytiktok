@@ -3,8 +3,9 @@ package middleware
 import (
 	"net/http"
 	"strings"
-	"tiktok/common"
-	"tiktok/model"
+
+	"tiktok/internal/mysqlDB"
+	"tiktok/pkg/utils"
 
 	"github.com/gin-gonic/gin"
 )
@@ -35,7 +36,7 @@ func AuthMiddleware() gin.HandlerFunc {
 		//提取token的有效部分，去掉Bearer前缀
 		tokenString = tokenString[7:]
 		//解析token
-		token, claims, err := common.ParseToken(tokenString)
+		token, claims, err := utils.ParseToken(tokenString)
 		//非法token
 		if err != nil || !token.Valid {
 			context.JSON(http.StatusUnauthorized, gin.H{
@@ -47,8 +48,8 @@ func AuthMiddleware() gin.HandlerFunc {
 		}
 		//获取claims中的信息
 		email := claims.Email
-		db := common.GetDB()
-		var curUser model.User
+		db := mysqlDB.GetDB()
+		var curUser mysqlDB.User
 		db.Where("telephone = ?", email).First(&curUser)
 		//写入上下文
 		context.Set("curUser", curUser)

@@ -1,7 +1,7 @@
-package common
+package utils
 
 import (
-	"tiktok/model"
+	"tiktok/internal/mysqlDB"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -16,7 +16,7 @@ type Claims struct {
 }
 
 // 生成Token
-func ReleaseToken(user model.User) (string, error) {
+func ReleaseToken(user mysqlDB.User) (string, error) {
 	//token的有效期
 	expirationTime := time.Now().Add(7 * 24 * time.Hour)
 	claims := &Claims{

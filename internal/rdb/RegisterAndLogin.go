@@ -1,15 +1,14 @@
-package Redis
+package rdb
 
 import (
 	"context"
 	"encoding/json"
-	"tiktok/common"
-	"tiktok/model"
+	"tiktok/internal/mysqlDB"
 	"time"
 )
 
-func SetUserInfo(user model.User) error {
-	rdb := common.GetRDB()
+func SetUserInfo(user mysqlDB.User) error {
+	rdb := GetRDB()
 	cbg := context.Background()
 
 	userJson, err := json.Marshal(user)
@@ -25,19 +24,19 @@ func SetUserInfo(user model.User) error {
 	return nil
 }
 
-func GetUserInfo(email string) (model.User, error) {
-	rdb := common.GetRDB()
+func GetUserInfo(email string) (mysqlDB.User, error) {
+	rdb := GetRDB()
 	cbg := context.Background()
 
 	userJson, err := rdb.Get(cbg, email).Result()
 	if err != nil {
-		return model.User{}, err
+		return mysqlDB.User{}, err
 	}
 
-	var user model.User
+	var user mysqlDB.User
 	err = json.Unmarshal([]byte(userJson), &user)
 	if err != nil {
-		return model.User{}, err
+		return mysqlDB.User{}, err
 	}
 
 	return user, nil

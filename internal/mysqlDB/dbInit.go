@@ -1,8 +1,7 @@
-package common
+package mysqlDB
 
 import (
 	"fmt"
-	"tiktok/model"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -30,7 +29,7 @@ func InitDB() *gorm.DB {
 		panic("failed to connect database,err: " + err.Error())
 	}
 	//自动创建数据表
-	db.AutoMigrate(&model.User{})
+	db.AutoMigrate(&User{})
 	DB = db
 	return db
 }

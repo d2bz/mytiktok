@@ -1,8 +1,9 @@
 package main
 
 import (
-	"tiktok/common"
-	"tiktok/routes"
+	"tiktok/internal/mysqlDB"
+	"tiktok/internal/rdb"
+	"tiktok/internal/router"
 
 	"github.com/gin-gonic/gin"
 )
@@ -10,8 +11,8 @@ import (
 func main() {
 	r := gin.Default()
 
-	db := common.InitDB()
-	common.InitRDB()
+	db := mysqlDB.InitDB()
+	rdb.InitRDB()
 
 	sqlDB, err := db.DB()
 	if err != nil {
@@ -19,7 +20,7 @@ func main() {
 	}
 	defer sqlDB.Close()
 
-	r = routes.Route(r)
+	r = router.Route(r)
 
 	r.Run(":8080")
 }
