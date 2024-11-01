@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"tiktok/internal/mysqlDB"
+	"tiktok/internal/repository/mysqlDB"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -11,17 +11,17 @@ import (
 var jwtKey = []byte("liudebaoliliuqin")
 
 type Claims struct {
-	Email string
+	UID string
 	jwt.RegisteredClaims
 }
 
 // 生成Token
-func ReleaseToken(user mysqlDB.User) (string, error) {
+func ReleaseToken(user *mysqlDB.User) (string, error) {
 	//token的有效期
 	expirationTime := time.Now().Add(7 * 24 * time.Hour)
 	claims := &Claims{
 		//自定义字段
-		Email: user.Email,
+		UID: user.UID,
 		//标准字段
 		RegisteredClaims: jwt.RegisteredClaims{
 			//过期时间

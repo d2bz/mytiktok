@@ -1,8 +1,8 @@
 package main
 
 import (
-	"tiktok/internal/mysqlDB"
-	"tiktok/internal/rdb"
+	"tiktok/internal/repository/mysqlDB"
+	"tiktok/internal/repository/rdb"
 	"tiktok/internal/router"
 
 	"github.com/gin-gonic/gin"

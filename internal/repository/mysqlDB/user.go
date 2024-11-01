@@ -1,6 +1,8 @@
 package mysqlDB
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
 type User struct {
 	gorm.Model
@@ -10,6 +12,6 @@ type User struct {
 	Password string `gorm:"type:varchar(100);not null"`
 }
 
-func (User) TableName() string {
+func (*User) TableName() string {
 	return "user"
 }

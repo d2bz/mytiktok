@@ -3,11 +3,12 @@ package rdb
 import (
 	"context"
 	"encoding/json"
-	"tiktok/internal/mysqlDB"
+	"tiktok/internal/repository/mysqlDB"
+
 	"time"
 )
 
-func SetUserInfo(user mysqlDB.User) error {
+func SetUserInfoToRedis(user *mysqlDB.User) error {
 	rdb := GetRDB()
 	cbg := context.Background()
 
@@ -24,20 +25,20 @@ func SetUserInfo(user mysqlDB.User) error {
 	return nil
 }
 
-func GetUserInfo(email string) (mysqlDB.User, error) {
+func GetUserInfoFromRedis(email string) (*mysqlDB.User, error) {
 	rdb := GetRDB()
 	cbg := context.Background()
 
 	userJson, err := rdb.Get(cbg, email).Result()
 	if err != nil {
-		return mysqlDB.User{}, err
+		return nil, err
 	}
 
 	var user mysqlDB.User
 	err = json.Unmarshal([]byte(userJson), &user)
 	if err != nil {
-		return mysqlDB.User{}, err
+		return nil, err
 	}
 
-	return user, nil
+	return &user, nil
 }

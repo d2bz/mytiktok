@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strings"
 
-	"tiktok/internal/mysqlDB"
+	"tiktok/internal/repository/mysqlDB"
 	"tiktok/pkg/utils"
 
 	"github.com/gin-gonic/gin"
@@ -47,10 +47,10 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 		//获取claims中的信息
-		email := claims.Email
+		uid := claims.UID
 		db := mysqlDB.GetDB()
 		var curUser mysqlDB.User
-		db.Where("telephone = ?", email).First(&curUser)
+		db.Where("UID = ?", uid).First(&curUser)
 		//写入上下文
 		context.Set("curUser", curUser)
 		context.Next()
