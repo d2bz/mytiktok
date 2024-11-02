@@ -7,7 +7,7 @@ import (
 	"gorm.io/gorm"
 )
 
-var DB *gorm.DB
+var gormDB *gorm.DB
 
 // InitDB 开启连接池
 func InitDB() *gorm.DB {
@@ -29,11 +29,16 @@ func InitDB() *gorm.DB {
 		panic("failed to connect database,err: " + err.Error())
 	}
 	//自动创建数据表
-	db.AutoMigrate(&User{})
-	DB = db
+	createTable(db)
+	gormDB = db
 	return db
 }
 
 func GetDB() *gorm.DB {
-	return DB
+	return gormDB
+}
+
+func createTable(db *gorm.DB) {
+	db.AutoMigrate(&User{})
+	db.AutoMigrate(&Video{})
 }

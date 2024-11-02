@@ -4,13 +4,14 @@ import (
 	"net/http"
 	"tiktok/internal/repository/mysqlDB"
 	"tiktok/pkg/utils"
+	"tiktok/pkg/utils/minioService"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
 
 func Publish(c *gin.Context) {
-	url, err := utils.UploadFile(c)
+	url, err := minioService.UploadVideo(c)
 	if err != nil {
 		utils.Response(c, http.StatusInternalServerError, "文件上传出错", err.Error())
 		return

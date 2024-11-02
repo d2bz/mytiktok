@@ -44,7 +44,7 @@ func Login(c *gin.Context) {
 	user, err := rdb.GetUserInfoFromRedis(email)
 	if err != nil || user == nil {
 		log.Printf("err: %v", err)
-		err = db.Where("email = ?", email).First(user).Error
+		err = db.Where("email = ?", email).First(&user).Error //使用&user而不是user，user可能为nil，使用&user gorm自动为user进行内存分配
 		if err != nil {
 			utils.Response(c, http.StatusInternalServerError, "登录时从数据库获取用户信息失败", err.Error())
 			return
