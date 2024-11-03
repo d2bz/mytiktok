@@ -1,4 +1,4 @@
-package videohandler
+package videoHandler
 
 import (
 	"net/http"

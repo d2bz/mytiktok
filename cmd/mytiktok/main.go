@@ -22,7 +22,7 @@ func main() {
 	}
 	defer sqlDB.Close()
 
-	r = router.Route(r)
+	router.Router(r)
 
 	r.Run(":8080")
 }
