@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"mime/multipart"
 	"path/filepath"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/minio/minio-go/v7"
@@ -20,7 +21,7 @@ func uploadFile(file *multipart.FileHeader) (string, error) {
 	defer src.Close()
 
 	// 上传到 MinIO
-	objectName := file.Filename
+	objectName := time.Now().Format("20060102_150405") + filepath.Ext(file.Filename)
 	contentType := file.Header.Get("Content-Type") //得到文件的类型
 	_, err = minioClient.PutObject(context.Background(), bucketName, objectName, src, file.Size, minio.PutObjectOptions{ContentType: contentType})
 	if err != nil {

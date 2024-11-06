@@ -11,4 +11,5 @@ func videoRouter(r *gin.Engine) {
 	v := r.Group("/video")
 	v.Use(middleware.AuthMiddleware())
 	v.POST("/publish", videoHandler.Publish)
+	v.POST("/delete", videoHandler.Delete)
 }
