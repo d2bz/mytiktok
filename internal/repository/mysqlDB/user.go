@@ -15,3 +15,8 @@ type User struct {
 func (*User) TableName() string {
 	return "user"
 }
+
+type apiUser struct {
+	Name string
+	Email string
+}

@@ -34,7 +34,6 @@ func Publish(c *gin.Context) {
 		PlayURL:  url,
 		AuthorID: uid,
 		Liked:    0,
-		IsLiked:  false,
 	}
 
 	db := mysqlDB.GetDB()

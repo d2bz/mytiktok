@@ -1,6 +1,8 @@
 package mysqlDB
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
 type Video struct {
 	gorm.Model
@@ -9,9 +11,16 @@ type Video struct {
 	PlayURL  string `gorm:"unique"`
 	AuthorID string
 	Liked    int
-	IsLiked  bool
 }
 
 func (*Video) TableName() string {
 	return "video"
+}
+
+type apiVideo struct {
+	Title    string
+	PlayURL  string
+	AutherID string
+	liked    int
+	IsLiked  bool
 }

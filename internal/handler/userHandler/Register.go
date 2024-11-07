@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"tiktok/internal/repository/mysqlDB"
 	"tiktok/internal/repository/rdb"
-	"tiktok/internal/service"
 	"tiktok/pkg/utils"
 
 	"github.com/gin-gonic/gin"
@@ -19,7 +18,7 @@ func Register(c *gin.Context) {
 	password := c.PostForm("password")
 
 	//数据验证
-	if matched, err := service.IsValidForm(service.EmailPattern, email); !matched {
+	if matched, err := utils.IsValidForm(utils.EmailPattern, email); !matched {
 		if err == nil {
 			utils.Response(c, http.StatusBadRequest, "邮箱格式错误", "")
 			return
@@ -29,7 +28,7 @@ func Register(c *gin.Context) {
 		}
 	}
 
-	if matched, err := service.IsValidForm(service.PasswordPattern, password); !matched {
+	if matched, err := utils.IsValidForm(utils.PasswordPattern, password); !matched {
 		if err == nil {
 			utils.Response(c, http.StatusBadRequest, "密码格式错误", "")
 			return
