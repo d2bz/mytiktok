@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 	"tiktok/internal/repository/mysqlDB"
-	"tiktok/internal/repository/rdb"
+	"tiktok/internal/service/userService"
 	"tiktok/pkg/utils"
 
 	"github.com/gin-gonic/gin"
@@ -40,7 +40,7 @@ func Login(c *gin.Context) {
 
 	//var user mysqlDB.User
 	//尝试从reids中取出用户注册信息，如果不存在再访问数据库
-	user, err := rdb.GetUserInfoFromRedis(email)
+	user, err := userService.GetLoginUser(email)
 	if err != nil || user == nil {
 		log.Printf("err: %v", err)
 		err = db.Where("email = ?", email).First(&user).Error //使用&user而不是user，user可能为nil，使用&user gorm自动为user进行内存分配

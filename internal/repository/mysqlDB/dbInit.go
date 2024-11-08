@@ -2,6 +2,7 @@ package mysqlDB
 
 import (
 	"fmt"
+	"tiktok/config"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -11,11 +12,11 @@ var gormDB *gorm.DB
 
 // InitDB 开启连接池
 func InitDB() *gorm.DB {
-	host := "124.71.229.101"
-	port := "3306"
-	database := "tiktok"
-	username := "root"
-	password := "tiktok"
+	host := config.IP_ADDR
+	port := config.DB_PORT
+	database := config.DB_DATABASE_NAME
+	username := config.DB_USER
+	password := config.DB_PASSWORD
 	charset := "utf8"
 	args := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=True&loc=Local",
 		username,

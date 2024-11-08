@@ -1,23 +1,25 @@
-package rdb
+package userService
 
 import (
 	"context"
 	"encoding/json"
 	"tiktok/internal/repository/mysqlDB"
+	"tiktok/internal/repository/redisDB"
 
 	"time"
 )
 
-func SetUserInfoToRedis(user *mysqlDB.User) error {
-	rdb := GetRDB()
+func SetLoginUser(user *mysqlDB.User) error {
+	rdb := redisDB.GetRDB()
 	cbg := context.Background()
+	key := redisDB.LOGIN_USER_EMAIL + user.Email
 
 	userJson, err := json.Marshal(user)
 	if err != nil {
 		return err
 	}
 
-	err = rdb.Set(cbg, user.Email, userJson, 5*time.Minute).Err()
+	err = rdb.Set(cbg, key, userJson, 5*time.Minute).Err()
 	if err != nil {
 		return err
 	}
@@ -25,11 +27,12 @@ func SetUserInfoToRedis(user *mysqlDB.User) error {
 	return nil
 }
 
-func GetUserInfoFromRedis(email string) (*mysqlDB.User, error) {
-	rdb := GetRDB()
+func GetLoginUser(email string) (*mysqlDB.User, error) {
+	rdb := redisDB.GetRDB()
 	cbg := context.Background()
+	key := redisDB.LOGIN_USER_EMAIL + email
 
-	userJson, err := rdb.Get(cbg, email).Result()
+	userJson, err := rdb.Get(cbg, key).Result()
 	if err != nil {
 		return nil, err
 	}

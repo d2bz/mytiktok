@@ -17,6 +17,17 @@ func (*User) TableName() string {
 }
 
 type apiUser struct {
-	Name string
+	UID   string
+	Name  string
 	Email string
+}
+
+func (u *User) ToApiUser() (*apiUser, error) {
+	au := &apiUser{
+		UID:   u.UID,
+		Name:  u.Name,
+		Email: u.Email,
+	}
+
+	return au, nil
 }

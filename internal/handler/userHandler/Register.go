@@ -3,7 +3,7 @@ package userHandler
 import (
 	"net/http"
 	"tiktok/internal/repository/mysqlDB"
-	"tiktok/internal/repository/rdb"
+	"tiktok/internal/service/userService"
 	"tiktok/pkg/utils"
 
 	"github.com/gin-gonic/gin"
@@ -67,7 +67,7 @@ func Register(c *gin.Context) {
 	db.Create(&newUser)
 
 	//将用户的注册信息存入redis，使注册后五分钟用户的登录不用访问数据库
-	err = rdb.SetUserInfoToRedis(&newUser)
+	err = userService.SetLoginUser(&newUser)
 	if err != nil {
 		utils.Response(c, http.StatusInternalServerError, "redis set出错", "")
 		return

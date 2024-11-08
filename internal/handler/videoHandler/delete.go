@@ -3,6 +3,7 @@ package videoHandler
 import (
 	"net/http"
 	"tiktok/internal/repository/mysqlDB"
+	"tiktok/internal/service/userService"
 	"tiktok/pkg/utils"
 	"tiktok/pkg/utils/minioService"
 
@@ -11,8 +12,7 @@ import (
 
 func Delete(c *gin.Context) {
 
-	c_uid, _ := c.Get("curUser")
-	uid := c_uid.(mysqlDB.User).UID
+	uid := userService.GetCurUserID(c)
 
 	url := c.PostForm("url")
 

@@ -2,7 +2,7 @@ package main
 
 import (
 	"tiktok/internal/repository/mysqlDB"
-	"tiktok/internal/repository/rdb"
+	"tiktok/internal/repository/redisDB"
 	"tiktok/internal/router"
 	"tiktok/pkg/utils/minioService"
 
@@ -13,7 +13,7 @@ func main() {
 	r := gin.Default()
 
 	db := mysqlDB.InitDB()
-	rdb.InitRDB()
+	redisDB.InitRDB()
 	minioService.MinioInit()
 
 	sqlDB, err := db.DB()

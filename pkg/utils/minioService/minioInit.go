@@ -3,16 +3,17 @@ package minioService
 import (
 	"context"
 	"log"
+	"tiktok/config"
 
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
 )
 
 const (
-	minioEndpoint   = "124.71.229.101:9000"
-	accessKeyID     = "access_key_perfric"
-	secretAccessKey = "secret_key_perfric"
-	bucketName      = "mybucket"
+	minioEndpoint   = config.MINIO_ADDR
+	accessKeyID     = config.ACCESS_KEY_ID
+	secretAccessKey = config.SECRET_ACCESS_KEY
+	bucketName      = config.BUCKET_NAME
 )
 
 var minioClient *minio.Client
