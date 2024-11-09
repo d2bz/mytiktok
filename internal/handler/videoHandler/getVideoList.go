@@ -2,6 +2,7 @@ package videoHandler
 
 import (
 	"net/http"
+	"tiktok/internal/service/userService"
 	"tiktok/internal/service/videoService"
 	"tiktok/pkg/utils"
 
@@ -9,7 +10,10 @@ import (
 )
 
 func GetVideoList(c *gin.Context) {
-	vList, err := videoService.VideoList()
+
+	uid := userService.GetCurUserID(c)
+
+	vList, err := videoService.VideoList(uid)
 	if err != nil {
 		utils.Response(c, http.StatusInternalServerError, "获取视频列表失败", err.Error())
 		return

@@ -36,7 +36,10 @@ func Publish(c *gin.Context) {
 		Liked:    0,
 	}
 
+	av := video.ToApiVideo()
+
 	db := mysqlDB.GetDB()
 	db.Create(&video)
-	utils.Response(c, http.StatusOK, "视频上传成功", url)
+
+	utils.Response(c, http.StatusOK, "视频上传成功", av)
 }

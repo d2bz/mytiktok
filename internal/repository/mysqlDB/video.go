@@ -17,7 +17,7 @@ func (*Video) TableName() string {
 	return "video"
 }
 
-type apiVideo struct {
+type ApiVideo struct {
 	VideoID  string
 	Title    string
 	PlayURL  string
@@ -26,8 +26,9 @@ type apiVideo struct {
 	IsLiked  bool
 }
 
-func (v *Video) ToApiVideo() (*apiVideo, error) {
-	av := &apiVideo{
+func (v *Video) ToApiVideo() (*ApiVideo) {
+
+	av := &ApiVideo{
 		VideoID:  v.VideoID,
 		Title:    v.Title,
 		PlayURL:  v.PlayURL,
@@ -36,5 +37,5 @@ func (v *Video) ToApiVideo() (*apiVideo, error) {
 		IsLiked:  false,
 	}
 
-	return av, nil
+	return av
 }
