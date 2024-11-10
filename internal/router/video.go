@@ -13,4 +13,5 @@ func videoRouter(r *gin.Engine) {
 	v.POST("/publish", videoHandler.Publish)
 	v.POST("/delete", videoHandler.Delete)
 	v.GET("/list", videoHandler.GetVideoList)
+	v.POST("/like", videoHandler.LikeVideo)
 }
