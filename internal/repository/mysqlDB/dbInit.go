@@ -42,4 +42,5 @@ func GetDB() *gorm.DB {
 func createTable(db *gorm.DB) {
 	db.AutoMigrate(&User{})
 	db.AutoMigrate(&Video{})
+	db.AutoMigrate(&Follow{})
 }

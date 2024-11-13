@@ -34,7 +34,7 @@ func Follow(uid string, toFollowUid string) (int, error) {
 		FollowedUserID: toFollowUid,
 	}
 
-	if isFollow {
+	if !isFollow {
 		if err := db.Create(followMsg).Error; err != nil {
 			return 0, err
 		}
@@ -46,7 +46,9 @@ func Follow(uid string, toFollowUid string) (int, error) {
 		return 1, nil
 	} else {
 		//硬删除
-		if err := db.Unscoped().Delete(followMsg).Error; err != nil {
+		if err := db.Unscoped().
+			Where("user_id = ? AND followed_user_id = ?", uid, followMsg.FollowedUserID).
+			Delete(followMsg).Error; err != nil {
 			return 0, err
 		}
 
@@ -56,4 +58,18 @@ func Follow(uid string, toFollowUid string) (int, error) {
 
 		return -1, nil
 	}
+}
+
+func CommonFollow(uid string, targetUid string) ([]string, error) {
+	cbg := context.Background()
+	rdb := redisDB.GetRDB()
+	key1 := redisDB.USER_FOLLOW + uid
+	key2 := redisDB.USER_FOLLOW + targetUid
+
+	commonFollows, err := rdb.SInter(cbg, key1, key2).Result()
+	if err != nil {
+		return nil, err
+	}
+
+	return commonFollows, nil
 }
