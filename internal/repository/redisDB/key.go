@@ -1,9 +1,10 @@
 package redisDB
 
 const (
-	LOGIN_USER_EMAIL = "user:login:"
+	USER_LOGIN_EMAIL = "user:login:"
+	USER_FOLLOW      = "user:follow:"
 
 	VIDEO_LIKED = "video:liked:"
 
-	USER_FOLLOW = "user:follow:"
+	COMMENT_INFO = "comment:info:"
 )

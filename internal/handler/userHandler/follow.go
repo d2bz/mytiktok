@@ -8,12 +8,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type followeMsg struct {
-	ToFollowUid string `json:"to_follow_user_id" binding:"required"`
+type followMsg struct {
+	ID string `json:"id" binding:"required"`
 }
 
 func Follow(c *gin.Context) {
-	var msg followeMsg
+	var msg followMsg
 	if err := c.ShouldBindJSON(&msg); err != nil {
 		utils.Response(c, http.StatusBadRequest, "数据绑定失败", err.Error())
 		return
@@ -21,7 +21,12 @@ func Follow(c *gin.Context) {
 
 	uid := userService.GetCurUserID(c)
 
-	flag, err := userService.Follow(uid, msg.ToFollowUid)
+	if uid == msg.ID {
+		utils.Response(c, http.StatusBadRequest, "不能关注自己", "")
+		return
+	}
+
+	flag, err := userService.Follow(uid, msg.ID)
 
 	if flag == 1 {
 		utils.Response(c, http.StatusOK, "关注成功", "")
@@ -36,14 +41,14 @@ func Follow(c *gin.Context) {
 }
 
 func CommonFollow(c *gin.Context) {
-	var msg followeMsg
+	var msg followMsg
 	if err := c.ShouldBindJSON(&msg); err != nil {
 		utils.Response(c, http.StatusBadRequest, "数据绑定失败", err.Error())
 		return
 	}
 
 	uid := userService.GetCurUserID(c)
-	commonFollows, err := userService.CommonFollow(uid, msg.ToFollowUid)
+	commonFollows, err := userService.CommonFollow(uid, msg.ID)
 	if err != nil {
 		utils.Response(c, http.StatusInternalServerError, "获取共同关注列表失败", err.Error())
 		return

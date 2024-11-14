@@ -12,7 +12,7 @@ import (
 func SetLoginUser(user *mysqlDB.User) error {
 	rdb := redisDB.GetRDB()
 	cbg := context.Background()
-	key := redisDB.LOGIN_USER_EMAIL + user.Email
+	key := redisDB.USER_LOGIN_EMAIL + user.Email
 
 	userJson, err := json.Marshal(user)
 	if err != nil {
@@ -30,7 +30,7 @@ func SetLoginUser(user *mysqlDB.User) error {
 func GetLoginUser(email string) (*mysqlDB.User, error) {
 	rdb := redisDB.GetRDB()
 	cbg := context.Background()
-	key := redisDB.LOGIN_USER_EMAIL + email
+	key := redisDB.USER_LOGIN_EMAIL + email
 
 	userJson, err := rdb.Get(cbg, key).Result()
 	if err != nil {

@@ -15,5 +15,5 @@ func userRouter(r *gin.Engine) {
 	u := r.Group("/user")
 	u.Use(middleware.AuthMiddleware())
 	u.POST("/follow", userHandler.Follow)
-
+	u.GET("/commonFollow", userHandler.CommonFollow)
 }
