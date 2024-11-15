@@ -5,8 +5,10 @@ import (
 	"encoding/json"
 	"tiktok/internal/repository/mysqlDB"
 	"tiktok/internal/repository/redisDB"
+	"time"
 
 	"github.com/google/uuid"
+	"github.com/redis/go-redis/v9"
 )
 
 // 发表评论
@@ -37,8 +39,19 @@ func PostComment(vid string, uid string, content string) error {
 
 	cbg := context.Background()
 	rdb := redisDB.GetRDB()
-	key := redisDB.COMMENT_INFO + comment.CommentID
+	key1 := redisDB.COMMENT_INFO + comment.CommentID
 
-	err = rdb.Set(cbg, key, commentJson, -1).Err()
+	err = rdb.Set(cbg, key1, commentJson, -1).Err()
+	if err != nil {
+		return err
+	}
+
+	zadd := &redis.Z{
+		Score:  float64(time.Now().UnixMilli()),
+		Member: comment.CommentID,
+	}
+
+	key2 := redisDB.VIDEO_COMMENT + vid
+	err = rdb.ZAdd(cbg, key2, *zadd).Err()
 	return err
 }

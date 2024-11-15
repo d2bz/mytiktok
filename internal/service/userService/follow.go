@@ -71,5 +71,6 @@ func CommonFollow(uid string, targetUid string) ([]string, error) {
 		return nil, err
 	}
 
+	//Todo 将commonFollows转换为user实例切片
 	return commonFollows, nil
 }
