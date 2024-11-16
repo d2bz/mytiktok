@@ -48,7 +48,7 @@ func PostComment(vid string, uid string, content string) error {
 
 	zadd := &redis.Z{
 		Score:  float64(time.Now().UnixMilli()),
-		Member: comment.CommentID,
+		Member: commentJson,
 	}
 
 	key2 := redisDB.VIDEO_COMMENT + vid
