@@ -9,7 +9,7 @@ import (
 )
 
 type videoMsg struct {
-	VideoID string `json:"video_id"`
+	VideoID string `json:"video_id" bind:"required"`
 }
 
 func GetCommentList(c *gin.Context) {

@@ -10,8 +10,8 @@ import (
 )
 
 type commentMsg struct {
-	VideoID string `json:"video_id"`
-	Content string `josn:"content"`
+	VideoID string `json:"video_id" bind:"required"`
+	Content string `josn:"content" binding:"required"`
 }
 
 func PostComment(c *gin.Context) {

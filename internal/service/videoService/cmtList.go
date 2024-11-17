@@ -39,7 +39,7 @@ func getCommentListFromRDB(vid string) ([]mysqlDB.Comment, error) {
 		return nil, err
 	}
 
-	//存入redis的是comment的Json字符串，要把
+	//存入redis的是comment的Json字符串，要把字符串转换为结构体实例
 	for _, v := range commentZStructs {
 		var comment mysqlDB.Comment
 		err := json.Unmarshal(v.Member.([]byte), &comment)
